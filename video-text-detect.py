@@ -1,5 +1,5 @@
 # użycie
-# python3 text_detection_video.py --east frozen_east_text_detection.pb
+# python3 video-text-detect.py --east frozen_east_text_detection.pb
 
 # import paczek
 from imutils.video import VideoStream
@@ -10,6 +10,9 @@ import argparse
 import imutils
 import time
 import cv2
+# import pytesseract 
+import pytesseract
+
 
 def decode_predictions(scores, geometry):
 	# pobierz liczbę wierszy i kolumn z objętości wyników, a następnie zainicjalizuj zestaw ramek i odpowiadające im wyniki ufności
@@ -101,6 +104,11 @@ while True:
 	# chwyć bieżącą klatkę, a następnie obsłuż ją, jeśli korzystamy z obiektu VideoStream lub VideoCapture
 	frame = vs.read()
 	frame = frame[1] if args.get("video", False) else frame
+
+	# wykrywaj text znaleziony na ramce video
+	text = pytesseract.image_to_string(frame)
+	# drukuj w konsoli
+	print('Wykryto tekst: ' + text)
 
 	# sprawdź, czy dotarliśmy do końca strumienia
 	if frame is None:
